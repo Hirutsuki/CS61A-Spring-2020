@@ -51,6 +51,8 @@ def largest_factor(x):
     1
     """
     "*** YOUR CODE HERE ***"
+    if x%2==0:
+        return int(x/2)
     for factor in reversed(range(1,x)):
         if x%factor==0:
             return factor
@@ -69,10 +71,7 @@ def if_function(condition, true_result, false_result):
     >>> if_function(3>2, 3+2, 3-2)
     5
     """
-    if condition:
-        return true_result
-    else:
-        return false_result
+    return condition and true_result or false_result
 
 
 def with_if_statement():
@@ -125,16 +124,13 @@ def hailstone(x):
     7
     """
     "*** YOUR CODE HERE ***"
-    count=1
     print(x)
-    while x>0:
+    for i in range(1,x+1):
+        if x==1:
+            return i
         if x%2==0:
             x=x/2
             print(int(x))
-            count+=1
         else:
             x=x*3+1
             print(int(x))
-            count+=1
-        if x==1:
-            return count
