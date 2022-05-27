@@ -48,7 +48,7 @@ def free_bacon(score):
     for i in range(len(str(cubed))):
         digit = cubed % 10
         sum += (-1)**i*digit
-        cubed = cubed//10
+        cubed //= 10
     return abs(sum)+1
     # END PROBLEM 2
 
@@ -68,12 +68,10 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
-    score = 0
     if num_rolls == 0:
-        score = free_bacon(opponent_score)
+        return free_bacon(opponent_score)
     else:
-        score = roll_dice(num_rolls, dice)
-    return score
+        return roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
 
