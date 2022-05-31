@@ -68,13 +68,11 @@ def accumulate(combiner, base, n, f):
     16
     """
     "*** YOUR CODE HERE ***"
-    if n == 0:
-        return base
+    acc = base
     if n > 0:
-        terms_sum = base
         for i in range(1, n+1):
-            terms_sum = combiner(terms_sum, f(i))
-        return terms_sum
+            acc = combiner(acc, f(i))
+    return acc
 
 
 def summation_using_accumulate(n, f):
@@ -114,9 +112,7 @@ def product_using_accumulate(n, f):
 
 def compose1(h, g):
     """Return a function f, such that f(x) = h(g(x))."""
-    def f(x):
-        return h(g(x))
-    return f
+    return lambda x: h(g(x))
 
 
 def make_repeater(h, n):
@@ -135,13 +131,7 @@ def make_repeater(h, n):
     5
     """
     "*** YOUR CODE HERE ***"
-    """ def repeater(arg):
-        for i in range(n):
-            arg = h(arg)
-        return arg
-    return repeater """
-    # combine f(n)
-    return accumulate(compose1, identity, n, lambda x: h)
+    return accumulate(compose1, identity, n, lambda i: h)
 
 ##########################
 # Just for fun Questions #
@@ -159,11 +149,13 @@ def successor(n):
 def one(f):
     """Church numeral 1: same as successor(zero)"""
     "*** YOUR CODE HERE ***"
+    return lambda x: f(x)
 
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
     "*** YOUR CODE HERE ***"
+    return lambda x: f(f(x))
 
 
 three = successor(two)
@@ -182,6 +174,7 @@ def church_to_int(n):
     3
     """
     "*** YOUR CODE HERE ***"
+    return n(increment)(0)
 
 
 def add_church(m, n):
@@ -191,6 +184,7 @@ def add_church(m, n):
     5
     """
     "*** YOUR CODE HERE ***"
+    return lambda f: lambda x: m(f)(n(f)(x))
 
 
 def mul_church(m, n):
@@ -203,6 +197,7 @@ def mul_church(m, n):
     12
     """
     "*** YOUR CODE HERE ***"
+    return lambda x: m(n(x))
 
 
 def pow_church(m, n):
@@ -214,3 +209,4 @@ def pow_church(m, n):
     9
     """
     "*** YOUR CODE HERE ***"
+    return n(m)
