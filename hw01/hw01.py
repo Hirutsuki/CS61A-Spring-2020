@@ -71,8 +71,8 @@ def if_function(condition, true_result, false_result):
     >>> if_function(3>2, 3+2, 3-2)
     5
     """
-    return condition and true_result or false_result
-
+    # return condition and true_result or false_result
+    return condition if true_result else false_result
 
 def with_if_statement():
     """
