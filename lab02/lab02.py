@@ -139,17 +139,18 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
-    def do_cycle(step, acc):
-        if step == 0:
+    def my_cycle(step):
+        def do_cycle(acc):
+            if step == 0:
+                return acc
+
+            for i in range(step):
+                if i % 3 == 0:
+                    acc = f1(acc)
+                elif i % 3 == 1:
+                    acc = f2(acc)
+                elif i % 3 == 2:
+                    acc = f3(acc)
             return acc
-
-        for i in range(step):
-            if i % 3 == 0:
-                acc = f1(acc)
-            elif i % 3 == 1:
-                acc = f2(acc)
-            elif i % 3 == 2:
-                acc = f3(acc)
-        return acc
-
-    return lambda step: lambda acc: do_cycle(step, acc)
+        return do_cycle
+    return my_cycle
