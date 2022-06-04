@@ -23,14 +23,12 @@ def roll_dice(num_rolls, dice=six_sided):
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
     sum = 0
-    for i in range(num_rolls):
+    for _ in range(num_rolls):
         result = dice()
         if result == 1 or sum == 1:
             sum = 1
             continue
-        else:
-            sum += result
-            continue
+        sum += result
     return sum
     # END PROBLEM 1
 
@@ -43,13 +41,15 @@ def free_bacon(score):
     assert score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
-    sum = 0
-    cubed = score**3
-    for i in range(len(str(cubed))):
-        digit = cubed % 10
-        sum += (-1)**i*digit
-        cubed //= 10
-    return abs(sum)+1
+    def reduce(accumulator, digits, transistion):
+        print('DEBUG:', accumulator)
+        current_last = digits % 10
+        except_last = digits//10
+        if digits == 0:
+            return accumulator
+        return reduce(accumulator+current_last*transistion, except_last, -transistion)
+
+    return abs(reduce(0, score**3, 1))+1
     # END PROBLEM 2
 
 
@@ -68,10 +68,7 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
-    if num_rolls == 0:
-        return free_bacon(opponent_score)
-    else:
-        return roll_dice(num_rolls, dice)
+    return free_bacon(opponent_score) if num_rolls == 0 else roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
 
@@ -246,19 +243,18 @@ def announce_highest(who, prev_high=0, prev_score=0):
     "*** YOUR CODE HERE ***"
     def say(score0, score1):
         if who:
-            if score1-prev_score > prev_high:
-                print(score1-prev_score,
-                      "point(s)! That's the biggest gain yet for Player", who)
-                return announce_highest(who, score1-prev_score, score1)
-            else:
-                return announce_highest(who, prev_high, score1)
+            gain = score1-prev_score
+            new_score = score1
         else:
-            if score0-prev_score > prev_high:
-                print(score0-prev_score,
-                      "point(s)! That's the biggest gain yet for Player", who)
-                return announce_highest(who, score0-prev_score, score0)
-            else:
-                return announce_highest(who, prev_high, score0)
+            gain = score0-prev_score
+            new_score = score0
+
+        new_high = prev_high
+        if gain > prev_high:
+            new_high = gain
+            print(new_high, "point(s)! That's the biggest gain yet for Player", who)
+        return announce_highest(who, new_high, new_score)
+
     return say
     # END PROBLEM 7
 
@@ -302,7 +298,7 @@ def make_averaged(g, num_samples=1000):
     "*** YOUR CODE HERE ***"
     def avg(*args):
         sum = 0
-        for i in range(num_samples):
+        for _ in range(num_samples):
             sum += g(*args)
         return sum/num_samples
     return avg
@@ -374,10 +370,7 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    if free_bacon(opponent_score) >= margin:
-        return 0
-    else:
-        return num_rolls
+    return 0 if free_bacon(opponent_score) >= margin else num_rolls
     # END PROBLEM 10
 
 
@@ -387,13 +380,10 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=6):
     non-beneficial swap. Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    if is_swap(score+free_bacon(opponent_score), opponent_score):
-        if opponent_score > score+free_bacon(opponent_score):
-            return 0
-        else:
-            return num_rolls
-    else:
-        return bacon_strategy(score, opponent_score, margin, num_rolls)
+    free_bacon_score=score+free_bacon(opponent_score)
+    if is_swap(free_bacon_score, opponent_score):
+        return 0 if opponent_score > free_bacon_score else num_rolls
+    return bacon_strategy(score, opponent_score, margin, num_rolls)
     # END PROBLEM 11
 
 
