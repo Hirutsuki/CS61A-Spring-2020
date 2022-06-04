@@ -39,10 +39,9 @@ def product(n, f):
     162
     """
     "*** YOUR CODE HERE ***"
-    sum = 1
-    for i in range(1, n+1):
-        sum *= f(i)
-    return sum
+    if n == 0:
+        return 1
+    return product(n-1, f)*f(n)
 
 
 def accumulate(combiner, base, n, f):
@@ -68,11 +67,9 @@ def accumulate(combiner, base, n, f):
     16
     """
     "*** YOUR CODE HERE ***"
-    acc = base
-    if n > 0:
-        for i in range(1, n+1):
-            acc = combiner(acc, f(i))
-    return acc
+    if n == 0:
+        return base
+    return combiner(accumulate(combiner, base, n-1, f), f(n))
 
 
 def summation_using_accumulate(n, f):
@@ -131,7 +128,7 @@ def make_repeater(h, n):
     5
     """
     "*** YOUR CODE HERE ***"
-    return accumulate(compose1, identity, n, lambda i: h)
+    return accumulate(compose1, identity, n, lambda _: h)
 
 ##########################
 # Just for fun Questions #
@@ -197,7 +194,7 @@ def mul_church(m, n):
     12
     """
     "*** YOUR CODE HERE ***"
-    return lambda x: m(n(x))
+    return lambda f: m(n(f))
 
 
 def pow_church(m, n):
