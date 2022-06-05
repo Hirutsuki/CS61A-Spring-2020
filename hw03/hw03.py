@@ -199,5 +199,11 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    #https://stackoverflow.com/questions/481692/can-a-lambda-function-call-itself-recursively-in-python
-    return (lambda f: f(f))(lambda f: lambda x: 1 if x == 1 else x * f(f)(x-1))
+    # https://stackoverflow.com/questions/481692/can-a-lambda-function-call-itself-recursively-in-python
+    # https://www.jb51.net/article/103972.htm
+    """
+    lambda f: lambda x: 1 if x <= 1 else x*f(x-1)
+    lambda f, x: 1 if x <= 1 else x*f(f, x-1)
+    lambda f: lambda x: 1 if x <= 1 else x*f(f)(x-1)  # currying
+    """
+    return (lambda f: f(f))(lambda f: lambda x: 1 if x <= 1 else x * f(f)(x-1))
