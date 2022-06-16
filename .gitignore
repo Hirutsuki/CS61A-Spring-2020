@@ -1,5 +1,10 @@
 **/__pycache__
+**/tests
+**/gui_files
+**/ok
+**/*.ok
 **/.ok_history
 **/.ok_storage.bak
 **/.ok_storage.dat
 **/.ok_storage.dir
+**/construct_check.py
