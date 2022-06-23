@@ -163,7 +163,6 @@ def report_progress(typed, prompt, id, send):
         if typed[i] != prompt[i]:
             correct = i
             break
-    print('DEBUG:',)
     progress = correct/len(prompt)
     send({'id': id, 'progress': progress})
     return progress
@@ -211,12 +210,12 @@ def fastest_words(game):
     words = range(len(all_words(game)))    # An index for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    find_players_by_time = lambda word, player: time(game, player, word)
     fastest = [[] for _ in players]
-    for w in words:
-        min_time = min([time(game, p, w) for p in players])
-        fastest_player = [p for p in players if time(
-            game, p, w) == min_time][0]
-        fastest[fastest_player].append(word_at(game, w))
+    for word in words:
+        fastest_player = min(
+            players, key=lambda players: find_players_by_time(word, players))
+        fastest[fastest_player].append(word_at(game, word))
     return fastest
     # END PROBLEM 10
 
