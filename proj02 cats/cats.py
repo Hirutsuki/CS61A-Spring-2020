@@ -96,8 +96,8 @@ def autocorrect(user_word, valid_words, diff_function, limit):
     "*** YOUR CODE HERE ***"
     if user_word in valid_words:
         return user_word
-    min_word = min(valid_words, key=lambda words: diff_function(
-        user_word, words, limit))
+    min_word = min(valid_words, key=lambda word: diff_function(
+        user_word, word, limit))
     return min_word if diff_function(user_word, min_word, limit) <= limit else user_word
     # END PROBLEM 5
 
@@ -214,7 +214,7 @@ def fastest_words(game):
     fastest = [[] for _ in players]
     for word in words:
         fastest_player = min(
-            players, key=lambda players: find_players_by_time(word, players))
+            players, key=lambda player: find_players_by_time(word, player))
         fastest[fastest_player].append(word_at(game, word))
     return fastest
     # END PROBLEM 10
