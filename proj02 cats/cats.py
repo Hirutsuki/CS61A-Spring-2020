@@ -113,7 +113,7 @@ def sphinx_swap(start, goal, limit):
             return limit+1
         if start == '' or goal == '':
             return change_count
-        return string_compare(start[1:], goal[1:], change_count+1) if start[:1] != goal[:1] else string_compare(start[1:], goal[1:], change_count)
+        return string_compare(start[1:], goal[1:], change_count+1) if start[0] != goal[0] else string_compare(start[1:], goal[1:], change_count)
     return string_compare(start, goal, 0)+abs(len(start)-len(goal))
     # END PROBLEM 6
 

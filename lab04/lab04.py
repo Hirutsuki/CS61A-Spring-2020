@@ -147,13 +147,13 @@ def max_subseq(n, l):
     def f(arr, acc, s, l):
         value = 0
         if l == 1:
-            value = acc+s[:1]
+            value = acc+s[0]
         if len(s) <= l:
             value = acc+s
         if value:
             arr.append(int(value))
             return value
-        f(arr, acc+s[:1], s[1:], l-1)
+        f(arr, acc+s[0], s[1:], l-1)
         f(arr, acc, s[1:], l)
         return max(arr)
     return f([], '', n_str, l)
