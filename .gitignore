@@ -1,6 +1,8 @@
 **/__pycache__
+**/assets
 **/data
 **/images
+**/img
 **/tests
 **/gui_files
 **/ok
