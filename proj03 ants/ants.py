@@ -492,18 +492,21 @@ class QueenAnt(ScubaThrower):  # You should change this line
         if self.true_queen:
             ScubaThrower.action(self, gamestate)
 
-            def find_ant(ant):
-                ants_here=[]
-                if ant:
-                    ants_here.append(ant)
-                    if isinstance(ant, ContainerAnt) and ant.contained_ant:
-                        ants_here.append(ant.contained_ant)
-                return ants_here
-
+            # def find_ant(place):
+            #     ant = place.ant
+            #     ants_here = []
+            #     if ant:
+            #         ants_here.append(ant)
+            #         if isinstance(ant, ContainerAnt) and ant.contained_ant:
+            #             ants_here.append(ant.contained_ant)
+            #     return ants_here
             all_places = list(gamestate.places.values())
             queen_index = all_places.index(self.place)
-            ants_behind = sum(
-                list(map(lambda place: find_ant(place.ant), all_places[:queen_index])), [])
+            # ants_behind = sum(list(map(find_ant, all_places[:queen_index])), [])
+            ants_behind = [place.ant
+                           for place in all_places[:queen_index] if place.ant]
+            ants_behind += [ant.contained_ant
+                            for ant in ants_behind if isinstance(ant, ContainerAnt) and ant.contained_ant]
 
             for ant in ants_behind:
                 if ant not in self.ants_behind:
