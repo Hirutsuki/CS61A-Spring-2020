@@ -3,6 +3,7 @@
 from operator import truediv
 from pickle import TRUE
 import random
+from tokenize import Double
 from ucb import main, interact, trace
 from collections import OrderedDict
 
@@ -477,7 +478,7 @@ class QueenAnt(ScubaThrower):  # You should change this line
         self.armor = armor
         self.true_queen = QueenAnt.true_queen
         QueenAnt.true_queen = False
-        self.ants_behind = []
+        self.ants_behind = set()
         # END Problem 13
 
     def action(self, gamestate):
@@ -488,21 +489,27 @@ class QueenAnt(ScubaThrower):  # You should change this line
         """
         # BEGIN Problem 13
         "*** YOUR CODE HERE ***"
-        def double_damage(ant):
-            if ant not in self.ants_behind:
-                ant.damage *= 2
-                self.ants_behind.append(ant)
-
         if self.true_queen:
             ScubaThrower.action(self, gamestate)
-            exit = self.place.exit
-            while exit:
-                ant = exit.ant
+
+            def find_ant(ant):
+                ants_here=[]
                 if ant:
-                    double_damage(ant)
+                    ants_here.append(ant)
                     if isinstance(ant, ContainerAnt) and ant.contained_ant:
-                        double_damage(ant.contained_ant)
-                exit = exit.exit
+                        ants_here.append(ant.contained_ant)
+                return ants_here
+
+            all_places = list(gamestate.places.values())
+            queen_index = all_places.index(self.place)
+            ants_behind = sum(
+                list(map(lambda place: find_ant(place.ant), all_places[:queen_index])), [])
+
+            for ant in ants_behind:
+                if ant not in self.ants_behind:
+                    ant.damage *= 2
+
+            self.ants_behind.update(ants_behind)
         else:
             self.reduce_armor(self.armor)
         # END Problem 13
@@ -557,7 +564,7 @@ class Bee(Insect):
         # Phase 4: Special handling for NinjaAnt
         # BEGIN Problem 7
         ant = self.place.ant
-        return ant.blocks_path if ant else False
+        return ant and ant.blocks_path
         # END Problem 7
 
     def action(self, gamestate):
@@ -598,7 +605,7 @@ def make_slow(action, bee):
     "*** YOUR CODE HERE ***"
     def new_action(gamestate):
         if not gamestate.time % 2:
-            return action(gamestate)
+            action(gamestate)
     return new_action
     # END Problem EC
 
@@ -628,7 +635,7 @@ def apply_effect(effect, bee, duration):
             effect(cache_action, bee)(gamestate)
             duration -= 1
         else:
-            bee.scared = False
+            bee.scared = bee.scared and False
             cache_action(gamestate)
 
     bee.action = cache_action if bee.been_scared and effect == make_scare else modify_action
@@ -703,7 +710,8 @@ class LaserAnt(ThrowerAnt):
                     if ant.contained_ant and ant.contained_ant is not self:
                         insects_of_place.append(ant.contained_ant)
 
-            pairs = pairs | dict(zip(insects_of_place, [distance]*len(insects_of_place)))
+            pairs = pairs | dict(
+                zip(insects_of_place, [distance]*len(insects_of_place)))
             place = place.entrance
             distance += 1
         return pairs
