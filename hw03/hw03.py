@@ -103,9 +103,7 @@ def count_change(total):
     def count(int_to_count, size):
         if int_to_count == 0:
             return 1
-        elif int_to_count < 0:
-            return 0
-        elif size == 0:
+        elif int_to_count < 0 or size == 0:
             return 0
         else:
             return count(int_to_count-size, size)+count(int_to_count, size//2)
