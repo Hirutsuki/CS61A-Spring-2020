@@ -100,7 +100,12 @@ def store_digits(n):
     Link(8, Link(7, Link(6)))
     """
     "*** YOUR CODE HERE ***"
-    return Link(n) if n < 10 else Link(int(str(n)[0]), store_digits(int(str(n)[1:])))
+    # return Link(n) if n < 10 else Link(int(str(n)[0]), store_digits(int(str(n)[1:])))
+    linked_list = Link.empty
+    while n:
+        linked_list = Link(n % 10, linked_list)
+        n //= 10
+    return linked_list
 
 
 def generate_paths(t, value):
@@ -281,16 +286,21 @@ def remove_all(link, value):
     <0 1>
     """
     "*** YOUR CODE HERE ***"
-    if link.rest is Link.empty:
-        return
-    if link.rest.first == value:
-        if link.rest.rest is Link.empty:
-            link.rest = Link.empty
+    # if link.rest is Link.empty:
+    #     return
+    # if link.rest.first == value:
+    #     if link.rest.rest is Link.empty:
+    #         link.rest = Link.empty
+    #     else:
+    #         link.rest = link.rest.rest
+    # else:
+    #     return remove_all(link.rest, value)
+    # return remove_all(link, value)
+    while link.rest is not Link.empty:
+        if link.rest.first == value:
+            link.rest = Link.empty if link.rest.rest is Link.empty else link.rest.rest
         else:
-            link.rest = link.rest.rest
-    else:
-        return remove_all(link.rest, value)
-    return remove_all(link, value)
+            link = link.rest
 
 
 def deep_map(f, link):
