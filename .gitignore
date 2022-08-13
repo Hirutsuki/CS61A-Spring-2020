@@ -1,6 +1,7 @@
 **/__pycache__
 **/assets
 **/data
+**/editor
 **/images
 **/img
 **/tests
@@ -11,4 +12,5 @@
 **/.ok_storage.bak
 **/.ok_storage.dat
 **/.ok_storage.dir
+**/scheme
 **/construct_check.py
